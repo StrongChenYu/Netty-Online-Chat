@@ -1,11 +1,13 @@
 package com.csu.chat.handler;
 
-import com.csu.chat.util.Logger;
-import com.csu.chat.util.UserInfo;
-import com.csu.chat.protocol.request.LoginRequestPacket;
-import com.csu.chat.protocol.response.LoginResponsePacket;
 import com.csu.chat.protocol.Packet;
 import com.csu.chat.protocol.PacketCodeC;
+import com.csu.chat.protocol.request.LoginRequestPacket;
+import com.csu.chat.protocol.response.LoginResponsePacket;
+import com.csu.chat.protocol.response.MessageResponsePacket;
+import com.csu.chat.util.Logger;
+import com.csu.chat.util.LoginUtil;
+import com.csu.chat.util.UserInfo;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -39,10 +41,13 @@ public class ClientHandler extends ChannelInboundHandlerAdapter {
 
             if (responsePacket.isSuccess()) {
                 Logger.printInfo("登录成功！");
+                LoginUtil.markAsLogin(ctx.channel());
             } else {
                 Logger.printInfo("登录失败！");
             }
-
+        } else if (decode instanceof MessageResponsePacket) {
+            MessageResponsePacket responsePacket = (MessageResponsePacket) decode;
+            Logger.printServerMsg("收到服务端的回复");
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.csu.chat.protocol;
-
-
 import com.csu.chat.protocol.request.LoginRequestPacket;
+import com.csu.chat.protocol.request.MessageRequestPacket;
 import com.csu.chat.protocol.response.LoginResponsePacket;
+import com.csu.chat.protocol.response.MessageResponsePacket;
 import com.csu.chat.serialize.Serializer;
 import com.csu.chat.serialize.SerializerAlgorithm;
 import com.csu.chat.serialize.impl.JsonSerializer;
@@ -12,8 +12,7 @@ import io.netty.buffer.ByteBufAllocator;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.csu.chat.protocol.Command.Command.LOGIN_REQUEST;
-import static com.csu.chat.protocol.Command.Command.LOGIN_RESPONSE;
+import static com.csu.chat.protocol.Command.Command.*;
 
 
 public class PacketCodeC implements PacketParser {
@@ -31,6 +30,8 @@ public class PacketCodeC implements PacketParser {
         serializerMap.put(SerializerAlgorithm.JSON, new JsonSerializer());
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
+        packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
+        packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
     }
 
     @Override

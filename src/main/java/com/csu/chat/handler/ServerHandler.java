@@ -1,9 +1,11 @@
 package com.csu.chat.handler;
 
-import com.csu.chat.protocol.request.LoginRequestPacket;
-import com.csu.chat.protocol.response.LoginResponsePacket;
 import com.csu.chat.protocol.Packet;
 import com.csu.chat.protocol.PacketCodeC;
+import com.csu.chat.protocol.request.LoginRequestPacket;
+import com.csu.chat.protocol.request.MessageRequestPacket;
+import com.csu.chat.protocol.response.LoginResponsePacket;
+import com.csu.chat.protocol.response.MessageResponsePacket;
 import com.csu.chat.util.Logger;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -20,7 +22,6 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
         ByteBuf byteBuf = (ByteBuf) msg;
-
         Packet packet = PacketCodeC.INSTANCE.decode(byteBuf);
 
         if (packet instanceof LoginRequestPacket) {
@@ -30,6 +31,7 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 
             if (valid(requestPacket)) {
                 responsePacket.setSuccess(true);
+
                 Logger.printInfo("用户验证成功！");
             } else {
                 responsePacket.setSuccess(false);
@@ -39,6 +41,18 @@ public class ServerHandler extends ChannelInboundHandlerAdapter {
 //            ctx.writeAndFlush(PacketCodeC.INSTANCE.encode(responsePacket));
             ByteBuf responseByteBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), responsePacket);
             ctx.channel().writeAndFlush(responseByteBuf);
+
+        } else if (packet instanceof MessageRequestPacket) {
+            //解析消息的MESSAGE
+            MessageRequestPacket messageRequestPacket = (MessageRequestPacket) packet;
+            Logger.printClientMsg(messageRequestPacket.getMessage());
+
+            MessageResponsePacket responsePacket = new MessageResponsePacket();
+            responsePacket.setMessage("[服务端回复消息]" + messageRequestPacket.getMessage());
+
+            ByteBuf msgBuf = PacketCodeC.INSTANCE.encode(ctx.alloc(), responsePacket);
+
+            ctx.channel().writeAndFlush(msgBuf);
         }
     }
 
