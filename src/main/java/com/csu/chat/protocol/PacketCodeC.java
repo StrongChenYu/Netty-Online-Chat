@@ -7,7 +7,6 @@ import com.csu.chat.serialize.Serializer;
 import com.csu.chat.serialize.SerializerAlgorithm;
 import com.csu.chat.serialize.impl.JsonSerializer;
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,19 +34,14 @@ public class PacketCodeC implements PacketParser {
     }
 
     @Override
-    public ByteBuf encode(ByteBufAllocator allocator, Packet packet) {
-        ByteBuf byteBuf = allocator.DEFAULT.ioBuffer();
-
+    public void encode(ByteBuf byteBuf, Packet packet) {
         byte[] content = Serializer.DEFAULT.serialize(packet);
-
         byteBuf.writeInt(MAGIC_NUMBER);
         byteBuf.writeByte(packet.getVersion());
         byteBuf.writeByte(Serializer.DEFAULT.getSerializerAlgorithm());
         byteBuf.writeByte(packet.getCommand());
         byteBuf.writeInt(content.length);
         byteBuf.writeBytes(content);
-
-        return byteBuf;
     }
 
     @Override

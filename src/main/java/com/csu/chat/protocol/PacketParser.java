@@ -1,7 +1,6 @@
 package com.csu.chat.protocol;
 
 import io.netty.buffer.ByteBuf;
-import io.netty.buffer.ByteBufAllocator;
 
 /**
  * 解析Packet的接口
@@ -13,7 +12,7 @@ public interface PacketParser {
      * @param packet
      * @return
      */
-    ByteBuf encode(ByteBufAllocator allocator, Packet packet);
+    void encode(ByteBuf byteBuf, Packet packet);
 
     /**
      * 将buteBuf中的内容提取出来，然后解析成Packet
