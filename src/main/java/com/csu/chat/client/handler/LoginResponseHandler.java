@@ -1,4 +1,4 @@
-package com.csu.chat.handler;
+package com.csu.chat.client.handler;
 
 import com.csu.chat.protocol.request.LoginRequestPacket;
 import com.csu.chat.protocol.response.LoginResponsePacket;
@@ -25,8 +25,14 @@ public class LoginResponseHandler extends SimpleChannelInboundHandler<LoginRespo
         if (msg.isSuccess()) {
             Logger.printInfo("登录成功！");
             LoginUtil.markAsLogin(ctx.channel());
+//            System.out.println(ctx.channel());
         } else {
             Logger.printInfo("登录失败！");
         }
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        System.out.println("客户端连接被关闭！");
     }
 }

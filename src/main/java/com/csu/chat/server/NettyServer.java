@@ -1,8 +1,9 @@
 package com.csu.chat.server;
 
 import com.csu.chat.coder.Spliter;
-import com.csu.chat.handler.LoginRequestHandler;
-import com.csu.chat.handler.MessageRequestHandler;
+import com.csu.chat.server.handler.AuthHandler;
+import com.csu.chat.server.handler.LoginRequestHandler;
+import com.csu.chat.server.handler.MessageRequestHandler;
 import com.csu.chat.coder.PacketDecoder;
 import com.csu.chat.coder.PacketEncoder;
 import io.netty.bootstrap.ServerBootstrap;
@@ -31,6 +32,8 @@ public class NettyServer {
                         ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginRequestHandler());
+
+                        ch.pipeline().addLast(new AuthHandler());
                         ch.pipeline().addLast(new MessageRequestHandler());
                         ch.pipeline().addLast(new PacketEncoder());
                     }

@@ -1,4 +1,4 @@
-package com.csu.chat.handler;
+package com.csu.chat.server.handler;
 
 import com.csu.chat.protocol.request.MessageRequestPacket;
 import com.csu.chat.protocol.response.MessageResponsePacket;

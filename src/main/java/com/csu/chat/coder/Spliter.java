@@ -24,4 +24,9 @@ public class Spliter extends LengthFieldBasedFrameDecoder {
         return super.decode(ctx, in);
     }
 
+
+    @Override
+    public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+        super.channelRead(ctx, msg);
+    }
 }
