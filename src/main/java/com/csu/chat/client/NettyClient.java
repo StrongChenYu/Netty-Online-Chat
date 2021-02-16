@@ -1,9 +1,10 @@
 package com.csu.chat.client;
 
+import com.csu.chat.coder.PacketDecoder;
+import com.csu.chat.coder.PacketEncoder;
+import com.csu.chat.coder.Spliter;
 import com.csu.chat.handler.LoginResponseHandler;
 import com.csu.chat.handler.MessageResponseHandler;
-import com.csu.chat.handler.PacketDecoder;
-import com.csu.chat.handler.PacketEncoder;
 import com.csu.chat.protocol.request.MessageRequestPacket;
 import com.csu.chat.util.LoginUtil;
 import io.netty.bootstrap.Bootstrap;
@@ -38,6 +39,7 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        ch.pipeline().addLast(new Spliter());
                         ch.pipeline().addLast(new PacketDecoder());
                         ch.pipeline().addLast(new LoginResponseHandler());
                         ch.pipeline().addLast(new MessageResponseHandler());

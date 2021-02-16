@@ -18,7 +18,7 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
         MessageResponsePacket responsePacket = new MessageResponsePacket();
 
         Logger.printClientMsg(requestPacket.getMessage());
-        responsePacket.setMessage("收到消息！");
+        responsePacket.setMessage("回复["+ requestPacket.getMessage() +"]消息！");
 
         return responsePacket;
     }

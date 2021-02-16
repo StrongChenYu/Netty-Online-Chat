@@ -1,4 +1,4 @@
-package com.csu.chat.handler;
+package com.csu.chat.coder;
 
 import com.csu.chat.protocol.Packet;
 import com.csu.chat.protocol.PacketCodeC;

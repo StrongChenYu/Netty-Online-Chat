@@ -8,6 +8,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket packet) throws Exception {
-        Logger.printServerMsg("收到服务端的回复：" + packet.getMessage());
+        Logger.printServerMsg(packet.getMessage());
     }
 }
