@@ -2,7 +2,9 @@ package com.csu.chat.server.handler;
 
 import com.csu.chat.protocol.request.LoginRequestPacket;
 import com.csu.chat.protocol.response.LoginResponsePacket;
-import com.csu.chat.util.LoginUtil;
+import com.csu.chat.session.Session;
+import com.csu.chat.util.SessionUtil;
+import com.csu.chat.util.UserInfo;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -17,10 +19,20 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         LoginResponsePacket responsePacket = new LoginResponsePacket();
 
         if (valid(requestPacket)) {
+            String userId = UserInfo.getRandomId();
+
             //登录成功
             responsePacket.setSuccess(true);
             responsePacket.setReason("登录成功！");
-            LoginUtil.markAsLogin(ctx.channel());
+            responsePacket.setUserId(userId);
+            responsePacket.setUserName(requestPacket.getName());
+
+            //保存登录的状态
+            Session session = new Session();
+            session.setUserId(userId);
+            session.setUserName(requestPacket.getName());
+
+            SessionUtil.bindSession(session, ctx.channel());
         } else {
             //登录失败
             responsePacket.setSuccess(false);
@@ -32,5 +44,10 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
 
     private boolean valid(LoginRequestPacket requestPacket) {
         return true;
+    }
+
+    @Override
+    public void channelInactive(ChannelHandlerContext ctx) {
+        SessionUtil.unbindSession(ctx.channel());
     }
 }

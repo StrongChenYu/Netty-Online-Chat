@@ -8,6 +8,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class MessageResponseHandler extends SimpleChannelInboundHandler<MessageResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, MessageResponsePacket packet) throws Exception {
-        Logger.printServerMsg(packet.getMessage());
+        Logger.printClientMsg(packet.getFromUserName(), packet.getMessage());
     }
 }

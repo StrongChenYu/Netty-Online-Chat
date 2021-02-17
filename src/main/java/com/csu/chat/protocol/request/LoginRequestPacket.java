@@ -1,6 +1,5 @@
 package com.csu.chat.protocol.request;
 
-import com.csu.chat.util.UserInfo;
 import com.csu.chat.protocol.Command.Command;
 import com.csu.chat.protocol.Packet;
 import lombok.Data;
@@ -11,14 +10,8 @@ import java.util.Objects;
 public class LoginRequestPacket extends Packet {
 
     private String userId;
-    String name;
-    String pwd;
-
-    public LoginRequestPacket() {
-        userId = "1";
-        name = UserInfo.USERNAME;
-        pwd = UserInfo.PWD;
-    }
+    private String name;
+    private String pwd;
 
     @Override
     public Byte getCommand() {

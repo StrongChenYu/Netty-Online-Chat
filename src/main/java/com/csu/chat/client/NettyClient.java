@@ -1,12 +1,13 @@
 package com.csu.chat.client;
 
+import com.csu.chat.client.handler.LoginResponseHandler;
+import com.csu.chat.client.handler.MessageResponseHandler;
 import com.csu.chat.coder.PacketDecoder;
 import com.csu.chat.coder.PacketEncoder;
 import com.csu.chat.coder.Spliter;
-import com.csu.chat.client.handler.LoginResponseHandler;
-import com.csu.chat.client.handler.MessageResponseHandler;
+import com.csu.chat.protocol.request.LoginRequestPacket;
 import com.csu.chat.protocol.request.MessageRequestPacket;
-import com.csu.chat.util.LoginUtil;
+import com.csu.chat.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
@@ -72,18 +73,43 @@ public class NettyClient {
 
 
     private static void startConsoleThread(Channel channel) {
+        Scanner sc = new Scanner(System.in);
+
         new Thread(() -> {
             while (!Thread.interrupted()) {
-                if (LoginUtil.hasLogin(channel)) {
-                    System.out.println("输入消息发送至服务端: ");
-                    Scanner sc = new Scanner(System.in);
-                    String line = sc.nextLine();
+                if (SessionUtil.hasLogin(channel)) {
+                    //已经登录就发送消息
+                    System.out.print("请输入发给的用户ID：");
+                    String toUserId = sc.next();
 
-                    MessageRequestPacket packet = new MessageRequestPacket();
-                    packet.setMessage(line);
-                    channel.writeAndFlush(packet);
+                    System.out.print("请输入发送的消息：");
+                    String message = sc.next();
+
+                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                } else {
+                    //没有登录就发送登录请求
+                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
+
+                    System.out.print("请输入用户名：");
+                    String userName = sc.next();
+
+                    System.out.print("请输入密码：");
+                    String userPwd = sc.next();
+
+                    loginRequestPacket.setName(userName);
+                    loginRequestPacket.setPwd(userPwd);
+
+                    channel.writeAndFlush(loginRequestPacket);
+                    waitForLoginResponse();
                 }
             }
         }).start();
+    }
+
+    private static void waitForLoginResponse() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException ignored) {
+        }
     }
 }
