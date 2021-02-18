@@ -5,7 +5,7 @@ import com.csu.chat.protocol.response.LoginResponsePacket;
 import com.csu.chat.session.Session;
 import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;
-import com.csu.chat.util.UserInfo;
+import com.csu.chat.util.IdUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
@@ -20,7 +20,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
         LoginResponsePacket responsePacket = new LoginResponsePacket();
 
         if (valid(requestPacket)) {
-            String userId = UserInfo.getRandomId();
+            String userId = IdUtil.getRandomId();
 
             //登录成功
             responsePacket.setSuccess(true);

@@ -2,6 +2,7 @@ package com.csu.chat.server;
 
 import com.csu.chat.coder.Spliter;
 import com.csu.chat.server.handler.AuthHandler;
+import com.csu.chat.server.handler.CreateGroupRequestHandler;
 import com.csu.chat.server.handler.LoginRequestHandler;
 import com.csu.chat.server.handler.MessageRequestHandler;
 import com.csu.chat.coder.PacketDecoder;
@@ -29,12 +30,19 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        //拆包粘包
                         ch.pipeline().addLast(new Spliter());
+                        //解码
                         ch.pipeline().addLast(new PacketDecoder());
+                        //登录
                         ch.pipeline().addLast(new LoginRequestHandler());
-
+                        //验证
                         ch.pipeline().addLast(new AuthHandler());
+                        //消息
                         ch.pipeline().addLast(new MessageRequestHandler());
+                        //群聊
+                        ch.pipeline().addLast(new CreateGroupRequestHandler());
+                        //编码
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });

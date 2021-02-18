@@ -1,12 +1,12 @@
 package com.csu.chat.client;
 
+import com.csu.chat.client.handler.CreateGroupResponseHandler;
 import com.csu.chat.client.handler.LoginResponseHandler;
 import com.csu.chat.client.handler.MessageResponseHandler;
 import com.csu.chat.coder.PacketDecoder;
 import com.csu.chat.coder.PacketEncoder;
 import com.csu.chat.coder.Spliter;
-import com.csu.chat.protocol.request.LoginRequestPacket;
-import com.csu.chat.protocol.request.MessageRequestPacket;
+import com.csu.chat.command.ConsoleCommandManager;
 import com.csu.chat.util.SessionUtil;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
@@ -40,10 +40,17 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        //拆包器
                         ch.pipeline().addLast(new Spliter());
+                        //解码器
                         ch.pipeline().addLast(new PacketDecoder());
+                        //登录
                         ch.pipeline().addLast(new LoginResponseHandler());
+                        //消息
                         ch.pipeline().addLast(new MessageResponseHandler());
+                        //创建群聊
+                        ch.pipeline().addLast(new CreateGroupResponseHandler());
+                        //编码器
                         ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
@@ -74,32 +81,15 @@ public class NettyClient {
 
     private static void startConsoleThread(Channel channel) {
         Scanner sc = new Scanner(System.in);
+        ConsoleCommandManager commandManager = new ConsoleCommandManager();
 
         new Thread(() -> {
             while (!Thread.interrupted()) {
                 if (SessionUtil.hasLogin(channel)) {
-                    //已经登录就发送消息
-                    System.out.print("请输入发给的用户ID：");
-                    String toUserId = sc.next();
-
-                    System.out.print("请输入发送的消息：");
-                    String message = sc.next();
-
-                    channel.writeAndFlush(new MessageRequestPacket(toUserId, message));
+                    commandManager.exec(sc, channel);
                 } else {
-                    //没有登录就发送登录请求
-                    LoginRequestPacket loginRequestPacket = new LoginRequestPacket();
-
-                    System.out.print("请输入用户名：");
-                    String userName = sc.next();
-
-                    System.out.print("请输入密码：");
-                    String userPwd = sc.next();
-
-                    loginRequestPacket.setName(userName);
-                    loginRequestPacket.setPwd(userPwd);
-
-                    channel.writeAndFlush(loginRequestPacket);
+                    //还没有登录就先完成登录
+                    commandManager.exec("login", sc, channel);
                     waitForLoginResponse();
                 }
             }

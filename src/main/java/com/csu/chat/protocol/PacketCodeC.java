@@ -1,6 +1,8 @@
 package com.csu.chat.protocol;
+import com.csu.chat.protocol.request.CreateGroupRequestPacket;
 import com.csu.chat.protocol.request.LoginRequestPacket;
 import com.csu.chat.protocol.request.MessageRequestPacket;
+import com.csu.chat.protocol.response.CreateGroupResponsePacket;
 import com.csu.chat.protocol.response.LoginResponsePacket;
 import com.csu.chat.protocol.response.MessageResponsePacket;
 import com.csu.chat.serialize.Serializer;
@@ -31,6 +33,8 @@ public class PacketCodeC implements PacketParser {
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
+        packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
+        packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
     }
 
     @Override
