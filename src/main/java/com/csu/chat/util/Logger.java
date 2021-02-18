@@ -11,8 +11,12 @@ public class Logger {
         System.out.println(new Date() + " " + "[收到客户端发来的消息]" + msg);
     }
 
+    public static void printClientMsg(String fromUserName, String toUserName, String msg) {
+        System.out.println(new Date() + " " + "[" + fromUserName + "->" + toUserName + "]" + msg);
+    }
+
     public static void printClientMsg(String userName, String msg) {
-        System.out.println(new Date() + " " + "[ " + userName + "]" + msg);
+        System.out.println(new Date() + " " + "[" + userName + "]" + msg);
     }
 
     public static void printServerMsg(String msg) {

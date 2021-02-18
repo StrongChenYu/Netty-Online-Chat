@@ -9,9 +9,19 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class SessionUtil {
     private static final Map<String, Channel> userIdChannelMap = new ConcurrentHashMap<>();
+    private static final Map<String, String> userIdToNameMap = new ConcurrentHashMap<>();
+
+    public static void addUser(String userId, String userName) {
+        userIdToNameMap.put(userId, userName);
+    }
+
+    public static String getUserName(String userId) {
+        return userIdToNameMap.get(userId);
+    }
 
     public static void bindSession(Session session, Channel channel) {
         userIdChannelMap.put(session.getUserId(), channel);
+        addUser(session.getUserId(), session.getUserName());
         channel.attr(Attributes.SESSION).set(session);
     }
 

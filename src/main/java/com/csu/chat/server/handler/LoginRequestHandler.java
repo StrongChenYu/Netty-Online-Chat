@@ -3,6 +3,7 @@ package com.csu.chat.server.handler;
 import com.csu.chat.protocol.request.LoginRequestPacket;
 import com.csu.chat.protocol.response.LoginResponsePacket;
 import com.csu.chat.session.Session;
+import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;
 import com.csu.chat.util.UserInfo;
 import io.netty.channel.ChannelHandlerContext;
@@ -33,6 +34,7 @@ public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginReques
             session.setUserName(requestPacket.getName());
 
             SessionUtil.bindSession(session, ctx.channel());
+            Logger.printInfo("["+ requestPacket.getName() +"]" + "登录成功");
         } else {
             //登录失败
             responsePacket.setSuccess(false);

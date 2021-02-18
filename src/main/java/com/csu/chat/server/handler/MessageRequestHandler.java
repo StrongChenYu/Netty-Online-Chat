@@ -24,6 +24,7 @@ public class MessageRequestHandler extends SimpleChannelInboundHandler<MessageRe
         Channel channel = SessionUtil.getChannelById(msg.getToUserId());
 
         if (SessionUtil.hasLogin(channel)) {
+            Logger.printClientMsg(session.getUserName(), SessionUtil.getUserName(msg.getToUserId()), msg.getMessage());
             channel.writeAndFlush(responsePacket);
         } else {
             //这里对方客户端不在线
