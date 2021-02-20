@@ -1,15 +1,14 @@
 package com.csu.chat.protocol;
-import com.csu.chat.protocol.request.CreateGroupRequestPacket;
-import com.csu.chat.protocol.request.LoginRequestPacket;
-import com.csu.chat.protocol.request.MessageRequestPacket;
-import com.csu.chat.protocol.response.CreateGroupResponsePacket;
-import com.csu.chat.protocol.response.LoginResponsePacket;
-import com.csu.chat.protocol.response.MessageResponsePacket;
+
+import com.csu.chat.protocol.Command.Command;
+import com.csu.chat.protocol.request.*;
+import com.csu.chat.protocol.response.*;
 import com.csu.chat.serialize.Serializer;
 import com.csu.chat.serialize.SerializerAlgorithm;
 import com.csu.chat.serialize.impl.JsonSerializer;
 import io.netty.buffer.ByteBuf;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,12 +28,17 @@ public class PacketCodeC implements PacketParser {
         serializerMap = new HashMap<>();
 
         serializerMap.put(SerializerAlgorithm.JSON, new JsonSerializer());
+
         packetTypeMap.put(LOGIN_REQUEST, LoginRequestPacket.class);
         packetTypeMap.put(LOGIN_RESPONSE, LoginResponsePacket.class);
         packetTypeMap.put(MESSAGE_REQUEST, MessageRequestPacket.class);
         packetTypeMap.put(MESSAGE_RESPONSE, MessageResponsePacket.class);
         packetTypeMap.put(CREATE_GROUP_REQUEST, CreateGroupRequestPacket.class);
         packetTypeMap.put(CREATE_GROUP_RESPONSE, CreateGroupResponsePacket.class);
+        packetTypeMap.put(LOGOUT_REQUEST, LogoutRequestPacket.class);
+        packetTypeMap.put(LOGOUT_RESPONSE, LogoutResponsePacket.class);
+        packetTypeMap.put(JOIN_GROUP_REQUEST, JoinGroupRequestPacket.class);
+        packetTypeMap.put(JOIN_GROUP_RESPONSE, JoinGroupResponsePacket.class);
     }
 
     @Override
@@ -86,6 +90,10 @@ public class PacketCodeC implements PacketParser {
     }
 
     public static void main(String[] args) {
-        System.out.println("chenyu");
+        Class clazz = Command.class;
+        Field[] fields = clazz.getFields();
+        for (Field field : fields) {
+            System.out.println(field.getName());
+        }
     }
 }

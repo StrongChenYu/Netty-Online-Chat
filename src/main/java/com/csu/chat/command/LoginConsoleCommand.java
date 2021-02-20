@@ -20,7 +20,5 @@ public class LoginConsoleCommand implements ConsoleCommand{
         requestPacket.setPwd(userPwd);
 
         channel.writeAndFlush(requestPacket);
-
     }
-
 }

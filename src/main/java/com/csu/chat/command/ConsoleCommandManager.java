@@ -1,5 +1,7 @@
 package com.csu.chat.command;
 
+import com.csu.chat.util.Logger;
+import com.csu.chat.util.SessionUtil;
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
@@ -14,17 +16,10 @@ public class ConsoleCommandManager implements ConsoleCommand{
         consoleCommandMap.put("login", new LoginConsoleCommand());
         consoleCommandMap.put("sendToUser", new SendToUserConsoleCommand());
         consoleCommandMap.put("createGroup", new CreateGroupConsoleCommand());
+        consoleCommandMap.put("logout", new LogoutConsoleCommand());
+        consoleCommandMap.put("joinGroup", new JoinGroupCommand());
     }
 
-
-    public void exec(String command, Scanner scanner, Channel channel) {
-        ConsoleCommand consoleCommand = consoleCommandMap.get(command);
-        if (consoleCommand != null) {
-            consoleCommand.exec(scanner, channel);
-        } else {
-            System.out.println("该指令不存在！");
-        }
-    }
 
     @Override
     public void exec(Scanner scanner, Channel channel) {
@@ -32,11 +27,27 @@ public class ConsoleCommandManager implements ConsoleCommand{
         String command = scanner.next();
         ConsoleCommand consoleCommand = consoleCommandMap.get(command);
 
-        if (consoleCommand != null) {
-            consoleCommand.exec(scanner, channel);
-        } else {
-            //无法识别的指令
+        if (consoleCommand == null) {
             System.out.println("指令无法识别");
+            return;
+        }
+
+        if (!command.equals("login")) {
+            if (!SessionUtil.hasLogin(channel)) {
+                Logger.printInfo("请先登录！");
+                return;
+            }
+        }
+
+        consoleCommand.exec(scanner, channel);
+        waitForResponse();
+    }
+
+    private static void waitForResponse() {
+        try {
+            Thread.sleep(800);
+        } catch (InterruptedException ignored) {
+
         }
     }
 }
