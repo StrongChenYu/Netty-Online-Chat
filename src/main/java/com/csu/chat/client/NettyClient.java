@@ -49,8 +49,12 @@ public class NettyClient {
                         ch.pipeline().addLast(new CreateGroupResponseHandler());
                         //加入群聊
                         ch.pipeline().addLast(new JoinGroupResponseHandler());
+                        //列出群聊人员列表
+                        ch.pipeline().addLast(new ListGroupMembersResponseHandler());
                         //注销
                         ch.pipeline().addLast(new LogoutResponseHandler());
+                        //退出群聊
+                        ch.pipeline().addLast(new QuitGroupResponseHandler());
                         //编码器
                         ch.pipeline().addLast(new PacketEncoder());
                     }

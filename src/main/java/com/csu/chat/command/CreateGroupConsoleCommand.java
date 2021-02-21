@@ -10,7 +10,7 @@ public class CreateGroupConsoleCommand implements ConsoleCommand{
     @Override
     public void exec(Scanner scanner, Channel channel) {
 
-        System.out.print("请输入创建群聊的用户列表: (用逗号分割)");
+        System.out.print("请输入创建群聊的用户列表: (用逗号分割): ");
         CreateGroupRequestPacket requestPacket = new CreateGroupRequestPacket();
 
         String input = scanner.next();

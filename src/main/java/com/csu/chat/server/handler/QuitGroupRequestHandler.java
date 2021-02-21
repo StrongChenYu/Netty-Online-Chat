@@ -1,0 +1,34 @@
+package com.csu.chat.server.handler;
+
+import com.csu.chat.protocol.request.QuitGroupRequestPacket;
+import com.csu.chat.protocol.response.QuitGroupResponsePacket;
+import com.csu.chat.util.SessionUtil;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.group.ChannelGroup;
+
+public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGroupRequestPacket> {
+    @Override
+    protected void channelRead0(ChannelHandlerContext ctx, QuitGroupRequestPacket msg) throws Exception {
+        QuitGroupResponsePacket responsePacket = new QuitGroupResponsePacket();
+
+        String groupId = msg.getGroupId();
+        ChannelGroup channelGroup = SessionUtil.getChannelGroup(groupId);
+
+        if (channelGroup == null) {
+            responsePacket.setReason("该群聊不存在");
+            responsePacket.setSuccess(false);
+        } else {
+            boolean remove = channelGroup.remove(ctx.channel());
+            if (remove) {
+                responsePacket.setSuccess(true);
+                responsePacket.setReason("群聊退出成功！");
+            } else {
+                responsePacket.setSuccess(false);
+                responsePacket.setReason("群聊退出失败！");
+            }
+        }
+
+        ctx.channel().writeAndFlush(responsePacket);
+    }
+}

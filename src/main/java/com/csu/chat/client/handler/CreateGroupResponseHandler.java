@@ -8,6 +8,6 @@ import io.netty.channel.SimpleChannelInboundHandler;
 public class CreateGroupResponseHandler extends SimpleChannelInboundHandler<CreateGroupResponsePacket> {
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, CreateGroupResponsePacket msg) throws Exception {
-        Logger.printInfo("创建群聊" + msg.getUserNameList() + "成功！");
+        Logger.printInfo("创建群聊" + msg.getUserNameList() + "成功！群聊ID为: " + msg.getGroupId());
     }
 }

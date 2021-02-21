@@ -43,6 +43,10 @@ public class NettyServer {
                         ch.pipeline().addLast(new LogoutRequestHandler());
                         //加入群聊
                         ch.pipeline().addLast(new JoinGroupRequestHandler());
+                        //列出群聊列表
+                        ch.pipeline().addLast(new ListGroupMembersRequestHandler());
+                        //退出群聊
+                        ch.pipeline().addLast(new QuitGroupRequestHandler());
                         //编码
                         ch.pipeline().addLast(new PacketEncoder());
                     }

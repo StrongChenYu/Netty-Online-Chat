@@ -25,7 +25,7 @@ public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGro
             responsePacket.setReason(session.getUserName() + "加入群聊成功");
 
             //打印日志
-            Logger.printUserOperationMsg(session.getUserName(),"加入群聊" + msg.getGroupId());
+            Logger.printUserOperationMsg(session.getUserName(),"加入群聊[" + msg.getGroupId() + "]");
             channelGroup.writeAndFlush(responsePacket);
         } else {
             responsePacket.setSuccess(false);
