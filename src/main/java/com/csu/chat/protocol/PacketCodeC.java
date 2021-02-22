@@ -43,6 +43,8 @@ public class PacketCodeC implements PacketParser {
         packetTypeMap.put(LIST_GROUP_MEMBERS_RESPONSE, ListGroupMembersResponsePacket.class);
         packetTypeMap.put(QUIT_GROUP_REQUEST, QuitGroupRequestPacket.class);
         packetTypeMap.put(QUIT_GROUP_RESPONSE, QuitGroupResponsePacket.class);
+        packetTypeMap.put(GROUP_MESSAGE_REQUEST, GroupMessageRequestPacket.class);
+        packetTypeMap.put(GROUP_MESSAGE_RESPONSE, GroupMessageResponsePacket.class);
     }
 
     @Override

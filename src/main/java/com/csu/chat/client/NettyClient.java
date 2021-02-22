@@ -51,6 +51,8 @@ public class NettyClient {
                         ch.pipeline().addLast(new JoinGroupResponseHandler());
                         //列出群聊人员列表
                         ch.pipeline().addLast(new ListGroupMembersResponseHandler());
+                        //发送消息到群聊
+                        ch.pipeline().addLast(new GroupMessageResponseHandler());
                         //注销
                         ch.pipeline().addLast(new LogoutResponseHandler());
                         //退出群聊

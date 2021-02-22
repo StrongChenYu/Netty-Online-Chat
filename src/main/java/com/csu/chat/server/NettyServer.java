@@ -45,6 +45,8 @@ public class NettyServer {
                         ch.pipeline().addLast(new JoinGroupRequestHandler());
                         //列出群聊列表
                         ch.pipeline().addLast(new ListGroupMembersRequestHandler());
+                        //发送消息到群聊
+                        ch.pipeline().addLast(new GroupMessageRequestHandler());
                         //退出群聊
                         ch.pipeline().addLast(new QuitGroupRequestHandler());
                         //编码

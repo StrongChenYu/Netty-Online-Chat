@@ -1,7 +1,9 @@
 package com.csu.chat.server.handler;
 
+import com.csu.chat.attribute.Attributes;
 import com.csu.chat.protocol.request.QuitGroupRequestPacket;
 import com.csu.chat.protocol.response.QuitGroupResponsePacket;
+import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -23,6 +25,7 @@ public class QuitGroupRequestHandler extends SimpleChannelInboundHandler<QuitGro
             if (remove) {
                 responsePacket.setSuccess(true);
                 responsePacket.setReason("群聊退出成功！");
+                Logger.printUserOperationMsg(ctx.channel().attr(Attributes.SESSION).get().getUserName(), "退出群聊[" + groupId +"]");
             } else {
                 responsePacket.setSuccess(false);
                 responsePacket.setReason("群聊退出失败！");
