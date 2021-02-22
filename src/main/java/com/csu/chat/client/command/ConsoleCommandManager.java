@@ -1,4 +1,4 @@
-package com.csu.chat.command;
+package com.csu.chat.client.command;
 
 import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;

@@ -1,4 +1,4 @@
-package com.csu.chat.command;
+package com.csu.chat.client.command;
 
 import com.csu.chat.protocol.request.GroupMessageRequestPacket;
 import io.netty.channel.Channel;

@@ -4,7 +4,7 @@ import com.csu.chat.client.handler.*;
 import com.csu.chat.coder.PacketDecoder;
 import com.csu.chat.coder.PacketEncoder;
 import com.csu.chat.coder.Spliter;
-import com.csu.chat.command.ConsoleCommandManager;
+import com.csu.chat.client.command.ConsoleCommandManager;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
