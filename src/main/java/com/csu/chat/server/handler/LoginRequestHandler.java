@@ -3,13 +3,20 @@ package com.csu.chat.server.handler;
 import com.csu.chat.protocol.request.LoginRequestPacket;
 import com.csu.chat.protocol.response.LoginResponsePacket;
 import com.csu.chat.session.Session;
+import com.csu.chat.util.IdUtil;
 import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;
-import com.csu.chat.util.IdUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 
+@ChannelHandler.Sharable
 public class LoginRequestHandler extends SimpleChannelInboundHandler<LoginRequestPacket> {
+
+    public static LoginRequestHandler INSTANCE = new LoginRequestHandler();
+
+    private LoginRequestHandler() {}
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, LoginRequestPacket msg) throws Exception {
         LoginResponsePacket responsePacket = login(ctx, msg);

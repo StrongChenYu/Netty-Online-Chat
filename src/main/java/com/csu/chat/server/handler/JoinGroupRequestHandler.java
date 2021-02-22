@@ -6,11 +6,18 @@ import com.csu.chat.protocol.response.JoinGroupResponsePacket;
 import com.csu.chat.session.Session;
 import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 
+@ChannelHandler.Sharable
 public class JoinGroupRequestHandler extends SimpleChannelInboundHandler<JoinGroupRequestPacket> {
+
+    public static final JoinGroupRequestHandler INSTANCE = new JoinGroupRequestHandler();
+
+    private JoinGroupRequestHandler() {}
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, JoinGroupRequestPacket msg) throws Exception {
         JoinGroupResponsePacket responsePacket = new JoinGroupResponsePacket();

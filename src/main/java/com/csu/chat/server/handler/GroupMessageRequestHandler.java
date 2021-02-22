@@ -6,11 +6,19 @@ import com.csu.chat.protocol.response.GroupMessageResponsePacket;
 import com.csu.chat.session.Session;
 import com.csu.chat.util.Logger;
 import com.csu.chat.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.group.ChannelGroup;
 
+
+@ChannelHandler.Sharable
 public class GroupMessageRequestHandler extends SimpleChannelInboundHandler<GroupMessageRequestPacket> {
+
+    public static final GroupMessageRequestHandler INSTANCE = new GroupMessageRequestHandler();
+
+    private GroupMessageRequestHandler() {}
+
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, GroupMessageRequestPacket msg) throws Exception {
         String toGroupId = msg.getToGroupId();

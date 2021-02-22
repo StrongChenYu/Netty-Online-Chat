@@ -1,9 +1,9 @@
 package com.csu.chat.server;
 
-import com.csu.chat.coder.Spliter;
-import com.csu.chat.server.handler.*;
-import com.csu.chat.coder.PacketDecoder;
 import com.csu.chat.coder.PacketEncoder;
+import com.csu.chat.coder.Spliter;
+import com.csu.chat.server.handler.IMHandler;
+import com.csu.chat.server.handler.PacketCodecHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
@@ -30,25 +30,11 @@ public class NettyServer {
                         //拆包粘包
                         ch.pipeline().addLast(new Spliter());
                         //解码
-                        ch.pipeline().addLast(new PacketDecoder());
-                        //登录
-                        ch.pipeline().addLast(new LoginRequestHandler());
+                        ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        //其他
+                        ch.pipeline().addLast(IMHandler.INSTANCE);
                         //验证
-                        ch.pipeline().addLast(new AuthHandler());
-                        //消息
-                        ch.pipeline().addLast(new MessageRequestHandler());
-                        //群聊
-                        ch.pipeline().addLast(new CreateGroupRequestHandler());
-                        //注销
-                        ch.pipeline().addLast(new LogoutRequestHandler());
-                        //加入群聊
-                        ch.pipeline().addLast(new JoinGroupRequestHandler());
-                        //列出群聊列表
-                        ch.pipeline().addLast(new ListGroupMembersRequestHandler());
-                        //发送消息到群聊
-                        ch.pipeline().addLast(new GroupMessageRequestHandler());
-                        //退出群聊
-                        ch.pipeline().addLast(new QuitGroupRequestHandler());
+//                        ch.pipeline().addLast(AuthHandler.INSTANCE);
                         //编码
                         ch.pipeline().addLast(new PacketEncoder());
                     }

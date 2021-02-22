@@ -1,10 +1,16 @@
 package com.csu.chat.server.handler;
 
 import com.csu.chat.util.SessionUtil;
+import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 
+@ChannelHandler.Sharable
 public class AuthHandler extends ChannelInboundHandlerAdapter {
+
+    public static AuthHandler INSTANCE = new AuthHandler();
+
+    private AuthHandler() {}
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
