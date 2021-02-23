@@ -37,10 +37,14 @@ public class NettyClient {
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     public void initChannel(SocketChannel ch) {
+                        //空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         //拆包器
                         ch.pipeline().addLast(new Spliter());
                         //解码器
                         ch.pipeline().addLast(new PacketDecoder());
+                        //心跳数据包
+                        ch.pipeline().addLast(new HeartBeatTimerHandler());
                         //登录
                         ch.pipeline().addLast(new LoginResponseHandler());
                         //消息

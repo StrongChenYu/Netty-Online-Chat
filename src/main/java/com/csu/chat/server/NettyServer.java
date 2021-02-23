@@ -1,8 +1,9 @@
 package com.csu.chat.server;
 
-import com.csu.chat.coder.PacketEncoder;
 import com.csu.chat.coder.Spliter;
+import com.csu.chat.server.handler.HeartBeatRequestHandler;
 import com.csu.chat.server.handler.IMHandler;
+import com.csu.chat.server.handler.IMIdleStateHandler;
 import com.csu.chat.server.handler.PacketCodecHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelInitializer;
@@ -27,16 +28,16 @@ public class NettyServer {
                 .childOption(ChannelOption.TCP_NODELAY, true)
                 .childHandler(new ChannelInitializer<NioSocketChannel>() {
                     protected void initChannel(NioSocketChannel ch) {
+                        //空闲检测
+                        ch.pipeline().addLast(new IMIdleStateHandler());
                         //拆包粘包
                         ch.pipeline().addLast(new Spliter());
                         //解码
                         ch.pipeline().addLast(PacketCodecHandler.INSTANCE);
+                        //心跳检测
+                        ch.pipeline().addLast(HeartBeatRequestHandler.INSTANCE);
                         //其他
                         ch.pipeline().addLast(IMHandler.INSTANCE);
-                        //验证
-//                        ch.pipeline().addLast(AuthHandler.INSTANCE);
-                        //编码
-                        ch.pipeline().addLast(new PacketEncoder());
                     }
                 });
 
